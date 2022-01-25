@@ -8,5 +8,5 @@ runs:
       shell: bash
     - run: |
         crate_version=$(cargo pkgid | cut -d# -f2)
-        test "$crate_version" = "$GITHUB_REF_NAME"
+        test "v$crate_version" = "$GITHUB_REF_NAME"
       shell: bash
