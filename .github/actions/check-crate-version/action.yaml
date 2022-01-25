@@ -1,0 +1,10 @@
+name: Check Cargo.toml version
+description: Check Cargo.toml version for consistency with the current git ref
+
+runs:
+  using: composite
+  steps:
+    - run: |
+        crate_version=$(cargo pkgid | cut -d# -f2)
+        test "$crate_version" = "$GITHUB_REF_NAME"
+      shell: bash
