@@ -1,0 +1,43 @@
+name: Rust tests and Clippy checks
+
+on:
+  workflow_call:
+    inputs:
+      check-formatting:
+        description: Whether to check cargo fmt or not
+        required: false
+        default: false
+        type: boolean
+  
+jobs:
+  clippy:
+    name: Clippy checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+      - name: Run clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --workspace --all-targets -- -D warnings
+      - name: Check fmt
+        if: ${{ inputs.check-formatting }}
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all --check
+
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+      - name: Run tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --workspace --all-targets
+
+
